@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-app-backend
+  namespace: chat-app
+spec:
+  selector:
+    matchLabels:
+      app: chat-app-backend
+  template:
+    metadata:
+      labels:
+        app: chat-app-backend
+    spec:
+      containers:
+      - name: chat-app-backend
+        image: ahmadcloudworks/chat-app-backend
+        ports:
+        - containerPort: 5001
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: "5001"  # Set the port for the backend server to listen on
+        - name: MONGODB_URI
+          value: "mongodb://mongodb:27017/root"  # MongoDB connection string with 'root' database
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+

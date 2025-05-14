@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-app-frontend
+  namespace: chat-app
+spec:
+  selector:
+    matchLabels:
+      app: chat-app-frontend
+  template:
+    metadata:
+      labels:
+        app: chat-app-frontend
+    spec:
+      containers:
+      - name: chat-app-frontend
+        image: ahmadcloudworks/chat-app-frontend
+        ports:
+        - containerPort: 80
+        env:
+        - name: NODE_ENV
+          value: production
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
