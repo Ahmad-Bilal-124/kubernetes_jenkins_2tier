@@ -1,38 +1,87 @@
+# version: '3.8'
+
+# services:
+#   frontend:
+#     image: iemafzal/frontend:v1
+#     ports:
+#       - "8080:80"
+#     depends_on:
+#       - backend
+#     networks:
+#       - chat-network
+#     environment:
+#       - BACKEND_URL=http://backend:5001
+
+#   backend:
+#     image: iemafzal/backend:v1
+#     ports:
+#       - "5001:5001"
+#     depends_on:
+#       - mongo
+#     environment:
+#       - MONGODB_URI=mongodb://root:admin@mongo:27017/chatApp?authSource=admin
+#       - PORT=5001
+#       - NODE_ENV=production
+#       - JWT_SECRET=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MzI0NjA1NTEsImV4cCI6MTc2Mzk5NjU1MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.YTeR6zLCKuOPjz5CYfwxW1gXp_wP1gAnN3qSMJIFQFg
+#     networks:
+#       - chat-network
+
+#   mongo:
+#     image: iemafzal/mongodb:v1
+#     ports:
+#       - "27017:27017"
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=root
+#       - MONGO_INITDB_ROOT_PASSWORD=admin
+#     volumes:
+#       - mongodb_data:/data/db
+#     networks:
+#       - chat-network
+
+# networks:
+#   chat-network:
+#     driver: bridge
+
+# volumes:
+#   mongodb_data:
+
+
 version: '3.8'
 
 services:
-  frontend:
-    image: iemafzal/frontend:v1
+  backend:
+    image: ahmadcloudworks/chat-app-backend
     ports:
-      - "8080:80"
+      - "5001:5001"
+    environment:
+      NODE_ENV: production
+      PORT: "5001"
+      MONGODB_URI: "mongodb://mongodb:27017/root"
+    depends_on:
+      - mongodb
+    networks:
+      - chat-network
+
+  frontend:
+    image: ahmadcloudworks/chat-app-frontend
+    ports:
+      - "80:80"
+    environment:
+      NODE_ENV: production
+      # You might need to configure backend URL here depending on your frontend logic
+      # Example: REACT_APP_API_BASE_URL: "http://localhost:5001/backend"
     depends_on:
       - backend
     networks:
       - chat-network
-    environment:
-      - BACKEND_URL=http://backend:5001
 
-  backend:
-    image: iemafzal/backend:v1
-    ports:
-      - "5001:5001"
-    depends_on:
-      - mongo
-    environment:
-      - MONGODB_URI=mongodb://root:admin@mongo:27017/chatApp?authSource=admin
-      - PORT=5001
-      - NODE_ENV=production
-      - JWT_SECRET=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MzI0NjA1NTEsImV4cCI6MTc2Mzk5NjU1MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.YTeR6zLCKuOPjz5CYfwxW1gXp_wP1gAnN3qSMJIFQFg
-    networks:
-      - chat-network
-
-  mongo:
-    image: iemafzal/mongodb:v1
+  mongodb:
+    image: mongo
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+      MONGO_INITDB_ROOT_USERNAME: ROOT
+      MONGO_INITDB_ROOT_PASSWORD: ROOT
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -44,9 +93,6 @@ networks:
 
 volumes:
   mongodb_data:
-
-
-
 
 
 
